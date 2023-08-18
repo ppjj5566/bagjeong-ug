@@ -42,7 +42,7 @@ class PCA9685:
                 value = 0
             elif pwm == (4096, 0):
                 value = 4095
-            value = pwm[1]
+            value = pwm[1] # type: ignore
             if invert:
                 value = 4095 - value
             return value

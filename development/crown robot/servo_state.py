@@ -1,6 +1,5 @@
 
 from machine import I2C, Pin
-from lib.pca9685 import PCA9685
 from lib.servo import Servos
 
 scl = Pin(1)
@@ -19,37 +18,22 @@ i2c = I2C(id, sda=sda, scl=scl)
 
 #pca1.freq(freq=50)
 #pca2.freq(freq=50)
-servo1 = Servos(i2c = i2c, min_us=500, max_us=2550)
-servo2 = Servos(i2c= i2c, address = 0x41, min_us=500, max_us=2550)
 
-corxia1 = servo1
-fermur1 = servo1
-tidia1 = servo1
+servo1 = Servos(i2c = i2c, min_us=450, max_us=2500)
+servo2 = Servos(i2c= i2c, address = 0x41, min_us=450, max_us=2500)
 
-corxia2 = servo1
-fermur2 = servo1
-tidia2 = servo1
+corxia1, corxia2, corxia3 = servo1, servo1, servo1
+fermur1, fermur2, fermur3 = servo1, servo1, servo1
+tidia1, tidia2, tidia3 = servo1, servo1, servo1
 
-corxia3 = servo1
-fermur3 = servo1
-tidia3 = servo1
-
-corxia6 = servo2
-fermur6 = servo2
-tidia6 = servo2
-
-corxia5 = servo2
-fermur5 = servo2
-tidia5 = servo2
-
-corxia4 = servo2
-fermur4 = servo2
-tidia4 = servo2
+corxia4, corxia5, corxia6 = servo2, servo2, servo2
+fermur4, fermur5, fermur6 = servo2, servo2, servo2
+tidia4, tidia5, tidia6 = servo2, servo2, servo2
 
 left_front =  [corxia1, fermur1, tidia1]
 left_middle = [corxia2, fermur2, tidia2]
 left_back = [corxia3, fermur3, tidia3]
-
+ 
 right_front = [corxia4, fermur4, tidia4]
 right_middle = [corxia5, fermur5, tidia5]
 right_back = [corxia6, fermur6, tidia6]
@@ -61,14 +45,17 @@ leg_offset = [left_front, left_middle,
               left_back, right_front, 
               right_middle, right_back]
 
-#캘리브레이션 맞춘 각각의 서보 값은 90도는 아니지만 실재값은 90도이다.
-left_front_angle = [87,100,100]
-left_middle_angle = [104,100,90]
-left_back_angle = [70,97,100]
+# 90도에서 각도를 조정해 실체 서보의 위치를 90도로 만들어 준다.
+#---------------------------------------------------------------------
+left_front_angle = [90,90,90]
+left_middle_angle = [98,82,90]
+left_back_angle = [80,78,95]
 
-right_back_angle = [97,60,90]
-right_middle_angle = [90,75,110]
-right_front_angle = [80,70,85]
+right_front_angle = [85,95,93]
+right_middle_angle = [87,90,87]
+right_back_angle = [90,88,85]
+
+#---------------------------------------------------------------------
 
 leg_offset_angle = [left_front_angle, left_middle_angle, left_back_angle, 
                     right_front_angle, right_middle_angle, right_back_angle]
@@ -78,3 +65,8 @@ def check_calibration():
     for i in range(6):
         for x in range(3):
             leg_offset[i][x].position(index = pca_pin_number[i][x] , degrees = leg_offset_angle[i][x])
+
+def calibration_each_servo(i = 0, x = 0):
+    leg_offset[i][x].position(index = pca_pin_number[i][x] , degrees = leg_offset_angle[i][x])
+
+check_calibration()

@@ -2,7 +2,7 @@ import network
 import socket
 import time
 import re
-import config
+import websocketService.config as config
 import machine
 
 def wait_wlan(wlan):
